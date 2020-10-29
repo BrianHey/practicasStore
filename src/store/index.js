@@ -1,16 +1,18 @@
 import Vue from "vue";
 import Vuex from "vuex";
 import firebase from "firebase";
+import Pizzas from './Pizzas/index'
+
 Vue.use(Vuex);
 
 export default new Vuex.Store({
   state: {
-    pizzas: []
+    pizzas: [],
   },
   mutations: {
-    GET_DATA(state, pizzas){
-      state.pizzas = pizzas
-    }
+    GET_DATA(state, pizzas) {
+      state.pizzas = pizzas;
+    },
   },
   actions: {
     getData({ commit }) {
@@ -22,9 +24,21 @@ export default new Vuex.Store({
           snapshot.forEach((p) => {
             pizzas.push({ id: p.id, data: p.data() });
           });
-          commit('GET_DATA', pizzas)
+          commit("GET_DATA", pizzas);
         });
     },
   },
-  modules: {},
+
+  getters: {
+    pizzasData: (state) => {
+      return state.pizzas.map((p) => {
+        const data = p.data
+        data.id = p.id
+        return data
+      });
+    },
+  },
+  modules: {
+    Pizzas
+  },
 });
