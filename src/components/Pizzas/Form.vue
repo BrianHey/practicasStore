@@ -54,20 +54,6 @@
 import { mapActions } from "vuex";
 export default {
   props: ["pizza", "edit"],
-  data: () => ({
-    pizza: {
-      name: "",
-      img: "",
-      prices: {
-        individual: "",
-        medium: "",
-        large: "",
-        XL: "",
-      },
-      ingredients: [""],
-    },
-  }),
-
   methods: {
     ...mapActions(["setNewPizza", "editPizzaFB"]),
     add() {
@@ -86,6 +72,7 @@ export default {
       this.pizza.stock = Number(this.pizza.stock);
 
       this.editPizzaFB(this.pizza);
+      this.$emit("hideDialog")
     },
   },
 };

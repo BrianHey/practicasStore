@@ -1,7 +1,7 @@
 <template>
   <div>
     <v-container>
-      <Form />
+      <Form :pizza="pizza" />
       <template>
         <v-data-table
           :headers="headers"
@@ -28,19 +28,17 @@
             ></v-select>
           </template>
           <template v-slot:item.acciones="{ item }">
-            <v-dialog v-model="dialog" persistent max-width="590">
-              <template v-slot:activator="{ on, attrs }">
-                <v-btn color="warning" fab small dark v-bind="attrs" v-on="on">
-                  <v-icon>mdi-pencil</v-icon>
-                </v-btn>
-              </template>
-              <v-card>
-                <v-card-title class="headline">
-                  Editando la piiza {{item.name}}
-                </v-card-title>
-                <v-card-text><Form :pizza="item" :edit="true" /></v-card-text>
-              </v-card>
-            </v-dialog>
+            <template>
+              <v-btn
+                color="warning"
+                fab
+                small
+                dark
+                @click="pizzaUpdate(item.id)"
+              >
+                <v-icon>mdi-pencil</v-icon>
+              </v-btn>
+            </template>
 
             <v-btn color="red" fab small dark @click="deletePizza(item.id)">
               <v-icon>mdi-delete</v-icon>
@@ -48,6 +46,16 @@
           </template>
         </v-data-table>
       </template>
+      <v-dialog v-model="dialog" max-width="590">
+        <v-card>
+          <v-card-title class="headline">
+            Editando la piiza
+          </v-card-title>
+          <v-card-text
+            ><Form @hideDialog="dialog = false" :pizza="pizzaEdit" :edit="true"
+          /></v-card-text>
+        </v-card>
+      </v-dialog>
     </v-container>
   </div>
 </template>
@@ -82,6 +90,18 @@ export default {
           iron: "1%",
         },
       ],
+      pizza: {
+        name: "",
+        img: "",
+        prices: {
+          individual: "",
+          medium: "",
+          large: "",
+          XL: "",
+        },
+        ingredients: [""],
+      },
+      pizzaEdit: {},
     };
   },
   components: {
@@ -96,6 +116,12 @@ export default {
     ...mapActions(["deletePizzaFB"]),
     deletePizza(id) {
       this.deletePizzaFB(id);
+    },
+
+    pizzaUpdate(id) {
+      const pizza = this.pizzasData.find((p) => p.id == id);
+      this.pizzaEdit = Object.assign({}, pizza);
+      this.dialog = true;
     },
   },
   computed: {
