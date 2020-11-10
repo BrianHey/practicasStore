@@ -6,10 +6,14 @@
       <v-toolbar-title>Pizza Store</v-toolbar-title>
 
       <v-spacer></v-spacer>
-      <h5>{{usuario.name}}</h5>
+      <h5>{{ usuario.name }}</h5>
       <v-chip class="ma-2" color="primary" @click="dialog = true">
         Crear Usuario
       </v-chip>
+      <router-link :to="{ name: 'Carrito' }" class="d-flex align-center">
+        <h5>Carrito</h5>
+        <v-icon> mdi-cart </v-icon>
+      </router-link>
     </v-app-bar>
 
     <v-navigation-drawer v-model="drawer" absolute temporary>
@@ -42,7 +46,7 @@
           Crear una nueva cuenta
         </v-card-title>
 
-        <v-form ref="form" v-model="valid" lazy-validation>
+        <v-form ref="form"  lazy-validation>
           <v-text-field
             v-model="user.name"
             :counter="10"
@@ -104,7 +108,7 @@ export default {
     ...mapActions(["addUser"]),
   },
   computed: {
-    ...mapState(["usuario"])
+    ...mapState(["usuario"]),
   },
   watch: {
     group() {

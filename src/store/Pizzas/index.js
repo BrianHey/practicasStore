@@ -28,4 +28,9 @@ export default {
         .set(pizza);
     },
   },
+  getters: {
+    getPizza: (state) => (id) => {
+      return state.pizzas.find((pizza) => pizza.id === id);
+    },
+  },
 };

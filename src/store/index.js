@@ -2,6 +2,8 @@ import Vue from "vue";
 import Vuex from "vuex";
 import firebase from "firebase";
 import Pizzas from "./Pizzas/index";
+import Carrito from "./Carrito/index";
+import createPersistedState from "vuex-persistedstate";
 
 Vue.use(Vuex);
 
@@ -85,8 +87,15 @@ export default new Vuex.Store({
         return data;
       });
     },
+    getPizza: (state) => (id) => {
+      return state.pizzas.find((pizza) => pizza.id === id);
+    },
   },
+
   modules: {
     Pizzas,
+    Carrito
   },
+
+  plugins: [createPersistedState()],
 });
