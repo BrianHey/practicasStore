@@ -3,13 +3,26 @@
     <v-app-bar color="deep-purple accent-4" dark>
       <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
 
-      <v-toolbar-title>Pizza Store</v-toolbar-title>
+      <router-link to="/">
+        <v-toolbar-title>
+          Pizza Store
+        </v-toolbar-title>
+      </router-link>
 
       <v-spacer></v-spacer>
       <h5>{{ usuario.name }}</h5>
-      <v-chip class="ma-2" color="primary" @click="dialog = true">
+      <v-chip class="ma-2" color="primary" @click="newUserModal = true">
         Crear Usuario
       </v-chip>
+
+      <v-chip class="ma-2" color="warning" @click="loginModal = true">
+        Iniciar Sesión
+      </v-chip>
+
+      <v-chip class="ma-2" color="danger" @click="logout">
+        Cerrar Sesión
+      </v-chip>
+
       <router-link :to="{ name: 'Carrito' }" class="d-flex align-center">
         <h5>Carrito</h5>
         <v-icon> mdi-cart </v-icon>
@@ -40,33 +53,33 @@
       </v-list>
     </v-navigation-drawer>
 
-    <v-dialog v-model="dialog" max-width="600">
+    <v-dialog v-model="newUserModal" max-width="600">
       <v-card class="pa-5">
         <v-card-title class="headline">
           Crear una nueva cuenta
         </v-card-title>
 
-        <v-form ref="form"  lazy-validation>
+        <v-form ref="form" lazy-validation>
           <v-text-field
-            v-model="user.name"
+            v-model="newUser.name"
             :counter="10"
             label="Name"
             required
           ></v-text-field>
 
           <v-text-field
-            v-model="user.email"
+            v-model="newUser.email"
             label="E-mail"
             required
           ></v-text-field>
 
           <v-text-field
-            v-model="user.direccion"
+            v-model="newUser.direccion"
             label="Dirección"
           ></v-text-field>
 
           <v-text-field
-            v-model="user.password"
+            v-model="newUser.password"
             :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"
             :type="show1 ? 'text' : 'password'"
             label="Contraseña"
@@ -80,6 +93,35 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
+
+    <v-dialog v-model="loginModal" max-width="600">
+      <v-card class="pa-5">
+        <v-card-title class="headline">
+          Iniciar Sesión
+        </v-card-title>
+
+        <v-form ref="form" lazy-validation>
+          <v-text-field
+            v-model="user.email"
+            label="E-mail"
+            required
+          ></v-text-field>
+
+          <v-text-field
+            v-model="user.password"
+            :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"
+            :type="show1 ? 'text' : 'password'"
+            label="Contraseña"
+            @click:append="show1 = !show1"
+          ></v-text-field>
+        </v-form>
+        <v-card-actions>
+          <v-btn color="green darken-1" text @click="loginUser">
+            Iniciar sesión
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
   </div>
 </template>
 
@@ -89,23 +131,40 @@ export default {
   data: () => ({
     drawer: false,
     group: null,
-    dialog: false,
+    newUserModal: false,
+    loginModal: false,
     show1: false,
 
-    user: {
+    newUser: {
       name: "",
       email: "",
       direccion: "",
       password: "",
     },
+
+    user: {
+      email: "",
+      password: "",
+    },
   }),
   methods: {
     crearUsuario() {
-      this.dialog = false;
-      this.addUser(this.user);
+      this.newUserModal = false;
+      this.addUser(this.newUser);
     },
-
-    ...mapActions(["addUser"]),
+    async loginUser() {
+      const email = this.user.email;
+      const password = this.user.password;
+      const respuesta = await this.login({ email, password });
+      if (respuesta) {
+        this.loginModal = false;
+        this.$router.push("/pizzas");
+      }
+    },
+    Logout() {
+      this.logout();
+    },
+    ...mapActions(["addUser", "login", "logout"]),
   },
   computed: {
     ...mapState(["usuario"]),

@@ -7,22 +7,29 @@
             <div>
               <v-card-title class="headline" v-text="item.name"></v-card-title>
             </div>
-
           </div>
-           <div>
-              <v-card-subtitle> Tamaño:  {{ item.size }} </v-card-subtitle>
-              <v-card-subtitle> Precio: {{ item.price }} </v-card-subtitle>
-              <v-card-subtitle> <v-btn fab small @click="MINUS(item.id)" > <v-icon>mdi-minus</v-icon></v-btn>  {{ item.cant }}  <v-btn fab small @click="PLUS(item.id)"><v-icon >mdi-plus</v-icon> </v-btn></v-card-subtitle>
-            </div>
+          <div>
+            <v-card-subtitle> Tamaño: {{ item.size }} </v-card-subtitle>
+            <v-card-subtitle> Precio: {{ item.price }} </v-card-subtitle>
+            <v-card-subtitle>
+              <v-btn fab small @click="MINUS({id: item.id, size: item.size})">
+                <v-icon>mdi-minus</v-icon></v-btn
+              >
+              {{ item.cant }}
+              <v-btn fab small @click="PLUS({id: item.id, size: item.size})"
+                ><v-icon>mdi-plus</v-icon>
+              </v-btn></v-card-subtitle
+            >
+          </div>
         </v-card>
       </v-col>
     </v-row>
-    <h1>Total: {{total ? total :0 }}</h1>
+    <h1>Total: {{ total ? total : 0 }}</h1>
     <v-btn @click="pay">Hacer la compra</v-btn>
   </v-container>
 </template>
 <script>
-import { mapGetters, mapState,  mapMutations, mapActions } from "vuex";
+import { mapGetters, mapState, mapMutations, mapActions } from "vuex";
 export default {
   name: "Carrito",
   data: () => ({
@@ -43,12 +50,12 @@ export default {
   }),
   computed: {
     ...mapState("Carrito", ["carrito"]),
-    ...mapGetters("Carrito",['total'])
+    ...mapGetters("Carrito", ["total"]),
   },
-  methods:{
-      ...mapMutations("Carrito",['MINUS', "PLUS"]),
-      ...mapActions("Carrito", ["pay"])
-  }
+  methods: {
+    ...mapMutations("Carrito", ["MINUS", "PLUS"]),
+    ...mapActions("Carrito", ["pay"]),
+  },
 };
 </script>
 

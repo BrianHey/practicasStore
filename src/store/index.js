@@ -19,6 +19,9 @@ export default new Vuex.Store({
     LOGIN(state, usuario) {
       state.usuario = usuario;
     },
+    LOGOUT(state) {
+      state.usuario = {};
+    },
   },
   actions: {
     getData({ commit }) {
@@ -51,31 +54,37 @@ export default new Vuex.Store({
         });
     },
 
-    login({ commit }, user) {
-      console.log(user);
-      firebase
-        .auth()
-        .signInWithEmailAndPassword(user.email, user.password)
-        .then(() => {
-          firebase
-            .firestore()
-            .collection("users")
-            .where("email", "==", user.email)
-            .get()
-            .then((snapshot) => {
-              if (snapshot.empty) {
-                console.log("No matching documents.");
-                return;
-              }
+    async login({ commit }, usuario) {
+      try {
+        const user = await firebase
+          .auth()
+          .signInWithEmailAndPassword(usuario.email, usuario.password);
 
-              snapshot.forEach((doc) => {
-                commit("LOGIN", doc.data());
-              });
-            })
-            .catch((err) => {
-              console.log("Error getting documents", err);
-            });
+        const snapshot = await firebase
+          .firestore()
+          .collection("users")
+          .where("email", "==", usuario.email)
+          .get();
+
+        snapshot.forEach((doc) => {
+          commit("LOGIN", doc.data());
         });
+
+        return true;
+      } catch (e) {
+        console.log(e);
+        return false;
+      }
+    },
+
+    async logout({ commit }) {
+      try {
+        await firebase.auth().signOut();
+        commit("LOGOUT");
+        return true;
+      } catch (e) {
+        return false;
+      }
     },
   },
 
@@ -94,7 +103,7 @@ export default new Vuex.Store({
 
   modules: {
     Pizzas,
-    Carrito
+    Carrito,
   },
 
   plugins: [createPersistedState()],

@@ -7,8 +7,9 @@
         indeterminate
       ></v-progress-linear>
     </template>
-
-    <v-img height="250" :src="pizza.data.img"></v-img>
+    <router-link :to="'/pizza/' + pizza.id">
+      <v-img height="250" :src="pizza.data.img"></v-img>
+    </router-link>
 
     <v-card-title>{{ pizza.data.name }}</v-card-title>
 
@@ -66,7 +67,7 @@ export default {
             price: this.precio,
             size: this.size,
             id: this.pizza.id,
-            stock: this.pizza.data.stock
+            stock: this.pizza.data.stock,
           });
     },
   },
