@@ -23,8 +23,8 @@
         Cerrar Sesión
       </v-chip>
 
-      <router-link :to="{ name: 'Carrito' }" class="d-flex align-center">
-        <h5>Carrito</h5>
+      <router-link  :to="{ name: 'Carrito' }" id="Carrito" class="d-flex align-center">
+        <h5 >Carritooo</h5>
         <v-icon> mdi-cart </v-icon>
       </router-link>
     </v-app-bar>

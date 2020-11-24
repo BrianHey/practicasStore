@@ -10,13 +10,15 @@
           </div>
           <div>
             <v-card-subtitle> Tamaño: {{ item.size }} </v-card-subtitle>
-            <v-card-subtitle> Precio: {{ item.price }} </v-card-subtitle>
             <v-card-subtitle>
-              <v-btn fab small @click="MINUS({id: item.id, size: item.size})">
+              Precio: <span class="precio_producto">{{ item.price }}</span>
+            </v-card-subtitle>
+            <v-card-subtitle>
+              <v-btn fab small @click="MINUS({ id: item.id, size: item.size })">
                 <v-icon>mdi-minus</v-icon></v-btn
               >
-              {{ item.cant }}
-              <v-btn fab small @click="PLUS({id: item.id, size: item.size})"
+              <h6 class="cantidad_item">{{ item.cant }}</h6>
+              <v-btn fab small @click="PLUS({ id: item.id, size: item.size })"
                 ><v-icon>mdi-plus</v-icon>
               </v-btn></v-card-subtitle
             >
@@ -24,7 +26,7 @@
         </v-card>
       </v-col>
     </v-row>
-    <h1>Total: {{ total ? total : 0 }}</h1>
+    <h1 id="total">Total: {{ total ? total : 0 }}</h1>
     <v-btn @click="pay">Hacer la compra</v-btn>
   </v-container>
 </template>
